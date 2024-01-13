@@ -83,10 +83,9 @@ export default function AccountTab() {
                     </div>
                 </DialogBody>
                 <DialogFooter placeholder={""}>
-                    <div className="flex gap-3">
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={handleOpen}>Save</button>
-
+                    <div className="flex gap-3 justify-between w-full">
                         <button className="text-gray-600 hover:text-gray-900" onClick={handleOpen}>Cancel</button>
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={handleOpen}>Save</button>
                     </div>
                 </DialogFooter>
             </Dialog>
