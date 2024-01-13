@@ -30,8 +30,35 @@ const data: Account[] = [
 export default function AccountTab() {
 
     const [open, setOpen] = useState(false);
+    const [accounts, setAccounts] = useState<Account[]>(data);
+
+    const [form, setForm] = useState({
+        name: '',
+        currency: 'ARS'
+    });
 
     const handleOpen = () => setOpen(!open);
+
+    const handleChange = (e: any) => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleSave = () => {
+        setAccounts([
+            ...accounts,
+            {
+                id: accounts.length + 1,
+                name: form.name,
+                currency: form.currency as 'ARS' | 'USD'
+            }
+        ])
+
+        setForm({ name: '', currency: 'ARS' })
+        handleOpen();
+    }
 
     return (
         <div>
@@ -50,7 +77,7 @@ export default function AccountTab() {
 
             <div>
                 {
-                    data.map((account: Account) => {
+                    accounts.map((account: Account) => {
                         return (
                             <div key={account.id} className="flex items-center justify-between py-2">
                                 <div className="flex items-center">
@@ -71,12 +98,22 @@ export default function AccountTab() {
                 <DialogBody placeholder={""}>
                     <div className="flex flex-col">
                         <label className="text-gray-600">Name</label>
-                        <input type="text" className="border border-gray-300 rounded-sm px-4 py-2" />
+                        <input
+                            type="text"
+                            className="border border-gray-300 rounded-sm px-4 py-2"
+                            name="name"
+                            value={form.name}
+                            onChange={handleChange}
+                        />
                     </div>
 
                     <div className="flex flex-col mt-4">
                         <label className="text-gray-600">Currency</label>
-                        <select className="border border-gray-300 rounded-sm px-4 py-2">
+                        <select className="border border-gray-300 rounded-sm px-4 py-2"
+                            name="currency"
+                            value={form.currency}
+                            onChange={handleChange}
+                        >
                             <option value="ARS">ARS</option>
                             <option value="USD">USD</option>
                         </select>
@@ -85,7 +122,7 @@ export default function AccountTab() {
                 <DialogFooter placeholder={""}>
                     <div className="flex gap-3 justify-between w-full">
                         <button className="text-gray-600 hover:text-gray-900" onClick={handleOpen}>Cancel</button>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={handleOpen}>Save</button>
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={handleSave}>Save</button>
                     </div>
                 </DialogFooter>
             </Dialog>
