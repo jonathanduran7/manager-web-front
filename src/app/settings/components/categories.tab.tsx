@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
 import { Category } from "../interfaces/category.interface";
-import CategoryModal from "./category.modal";
+import {CategoryModal} from ".";
 
 const data: Category[] = [
     {
@@ -21,7 +21,7 @@ const data: Category[] = [
     }
 ]
 
-export default function CategoriesTab() {
+export function CategoriesTab() {
     const [open, setOpen] = useState(false);
     const [categories, setCategories] = useState<Category[]>(data);
     const [form, setForm] = useState<Omit<Category, 'id'>>({

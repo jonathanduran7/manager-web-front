@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Account } from "../interfaces/account.interface";
-import AccountModal from "./account.modal";
+import { AccountModal } from "./account.modal";
 
 const data: Account[] = [
     {
@@ -22,7 +22,7 @@ const data: Account[] = [
     }
 ]
 
-export default function AccountTab() {
+export function AccountTab() {
 
     const [open, setOpen] = useState(false);
     const [accounts, setAccounts] = useState<Account[]>(data);

@@ -9,7 +9,7 @@ interface Props {
     form: Omit<Category, 'id'>;
 }
 
-export default function CategoryModal({ open, handleChange, handleSave, handleOpen, form }: Props) {
+export function CategoryModal({ open, handleChange, handleSave, handleOpen, form }: Props) {
     return (
         <Dialog open={open} handler={handleOpen} placeholder={""}>
             <DialogHeader placeholder={""}>Agregar nueva categoria</DialogHeader>

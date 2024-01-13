@@ -9,7 +9,7 @@ interface Props {
     form: Omit<Account, 'id'>;
 }
 
-export default function AccountModal({ open, handleChange, handleSave, handleOpen, form }: Props) {
+export function AccountModal({ open, handleChange, handleSave, handleOpen, form }: Props) {
     return (
         <Dialog open={open} handler={handleOpen} placeholder={""}>
             <DialogHeader placeholder={""}>Agregar nueva cuenta</DialogHeader>
