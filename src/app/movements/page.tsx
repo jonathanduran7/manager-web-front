@@ -1,6 +1,11 @@
+import Header from "../components/header.component";
+
 export default function Movements() {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <main className="min-h-screen p-24">
+
+            <Header />
+            
             Movimientos
         </main>
     )
