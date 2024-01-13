@@ -90,7 +90,7 @@ export default function CategoriesTab() {
                 }
             </div>
             <Dialog open={open} handler={handleOpen} placeholder={""}>
-                <DialogHeader placeholder={""}>Agregar nueva cuenta</DialogHeader>
+                <DialogHeader placeholder={""}>Agregar nueva categoria</DialogHeader>
                 <DialogBody placeholder={""}>
                     <div className="flex flex-col">
                         <label className="text-gray-600">Name</label>
