@@ -10,6 +10,5 @@ const config: Config = {
   theme: {},
   plugins: [],
 }
-// export default config
 
 module.exports = withMT(config);
