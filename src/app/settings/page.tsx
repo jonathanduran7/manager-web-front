@@ -2,6 +2,7 @@
 import { Tab, TabPanel, Tabs, TabsBody, TabsHeader } from "@material-tailwind/react";
 import AccountTab from "./components/accounts.tab";
 import Header from "../components/header.component";
+import CategoriesTab from "./components/categories.tab";
 
 export default function Settings() {
     
@@ -30,7 +31,7 @@ export default function Settings() {
                         <AccountTab />
                     </TabPanel>
                     <TabPanel key={2} value={2}>
-                        <h1>Categories</h1>
+                        <CategoriesTab />
                     </TabPanel>
                 </TabsBody>
             </Tabs>
