@@ -1,13 +1,8 @@
 'use client'
 
-import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
 import { useState } from "react";
-
-interface Account {
-    id: number;
-    name: string;
-    currency: 'ARS' | 'USD';
-}
+import { Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
+import { Account } from "../interfaces/account.interface";
 
 const data: Account[] = [
     {
@@ -32,7 +27,7 @@ export default function AccountTab() {
     const [open, setOpen] = useState(false);
     const [accounts, setAccounts] = useState<Account[]>(data);
 
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<Omit<Account,'id'>>({
         name: '',
         currency: 'ARS'
     });

@@ -1,12 +1,7 @@
 'use client'
-import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
 import { useState } from "react";
-
-interface Category {
-    id: number;
-    name: string;
-    type: 'income' | 'expense';
-}
+import { Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
+import { Category } from "../interfaces/category.interface";
 
 const data: Category[] = [
     {
