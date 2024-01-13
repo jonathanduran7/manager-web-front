@@ -1,5 +1,6 @@
 'use client'
 import { Tab, TabPanel, Tabs, TabsBody, TabsHeader } from "@material-tailwind/react";
+import AccountTab from "./components/accounts.tab";
 
 export default function Settings() {
     return (
@@ -21,7 +22,7 @@ export default function Settings() {
                 </TabsHeader>
                 <TabsBody placeholder={'tabs'}>
                     <TabPanel key={1} value={1}>
-                        <h1>Accounts</h1>
+                        <AccountTab />
                     </TabPanel>
                     <TabPanel key={1} value={2}>
                         <h1>Categories</h1>
