@@ -24,7 +24,7 @@ export default function Settings() {
                     <TabPanel key={1} value={1}>
                         <AccountTab />
                     </TabPanel>
-                    <TabPanel key={1} value={2}>
+                    <TabPanel key={2} value={2}>
                         <h1>Categories</h1>
                     </TabPanel>
                 </TabsBody>
