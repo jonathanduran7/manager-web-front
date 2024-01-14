@@ -5,13 +5,8 @@ export const getAccounts = async () => {
         setTimeout(() => {
             const data: Account[] = [
                 {
-                    id: 1,
+                    id: Math.random().toString(36).substr(2) + Date.now().toString(36),
                     name: 'Cash',
-                    currency: 'ARS'
-                },
-                {
-                    id: 2,
-                    name: 'Banco galicia',
                     currency: 'ARS'
                 }
             ]
