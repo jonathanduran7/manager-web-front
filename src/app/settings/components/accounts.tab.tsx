@@ -1,44 +1,22 @@
 'use client'
 
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Account } from "../interfaces/account.interface";
 import { AccountModal } from "./account.modal";
-
-const data: Account[] = [
-    {
-        id: 1,
-        name: 'Cash',
-        currency: 'ARS'
-    },
-    {
-        id: 2,
-        name: 'Banco galicia',
-        currency: 'ARS'
-    },
-    {
-        id: 3,
-        name: 'Mercado pago',
-        currency: 'ARS'
-    }
-]
+import { getAccounts } from "@/app/api/account.api";
 
 export function AccountTab() {
 
     const [open, setOpen] = useState(false);
-    const [accounts, setAccounts] = useState<Account[]>(data);
-
-    const [form, setForm] = useState<Omit<Account,'id'>>({
-        name: '',
-        currency: 'ARS'
-    });
+    const [accounts, setAccounts] = useState<Account[]>([]);
+    const [form, setForm] = useState<Omit<Account, 'id'>>({ name: '', currency: 'ARS' });
 
     const handleOpen = () => setOpen(!open);
 
-    const handleChange = (e: any) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        })
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
+        setForm({ ...form, [e.target.name]: e.target.value })
     }
 
     const handleSave = () => {
@@ -55,6 +33,15 @@ export function AccountTab() {
         handleOpen();
     }
 
+    useEffect(() => {
+        const getData = async () => {
+            const data = await getAccounts();
+            setAccounts(data);
+        }
+
+        getData();
+    }, [])
+
     return (
         <div>
             <div className="mb-8">
@@ -69,6 +56,16 @@ export function AccountTab() {
                     Add account
                 </button>
             </div>
+
+            {
+                accounts.length === 0 && (
+                    <div className="flex items-center justify-center">
+                        <p className="text-gray-600">
+                            No accounts yet.
+                        </p>
+                    </div>
+                )
+            }
 
             <div>
                 {
@@ -88,13 +85,13 @@ export function AccountTab() {
                 }
             </div>
 
-           <AccountModal 
+            <AccountModal
                 open={open}
                 handleChange={handleChange}
                 handleSave={handleSave}
                 handleOpen={handleOpen}
                 form={form}
-           />
+            />
         </div>
     )
 }
