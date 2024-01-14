@@ -5,11 +5,13 @@ import { Account } from "../interfaces/account.interface";
 import { AccountModal } from "./account.modal";
 import { getAccounts } from "@/app/api/account.api";
 
+const emptyForm: Omit<Account, 'id'> = { name: '', currency: 'ARS' };
+
 export function AccountTab() {
 
     const [open, setOpen] = useState(false);
     const [accounts, setAccounts] = useState<Account[]>([]);
-    const [form, setForm] = useState<Omit<Account, 'id'>>({ name: '', currency: 'ARS' });
+    const [form, setForm] = useState<Omit<Account, 'id'>>(emptyForm);
 
     const handleOpen = () => setOpen(!open);
 
@@ -20,22 +22,31 @@ export function AccountTab() {
     }
 
     const handleSave = () => {
-        setAccounts([
-            ...accounts,
-            {
-                id: accounts.length + 1,
-                name: form.name,
-                currency: form.currency as 'ARS' | 'USD'
-            }
-        ])
 
-        setForm({ name: '', currency: 'ARS' })
+        const accountsData = [...accounts, {
+            id: Math.random().toString(36) + Date.now().toString(36),
+            name: form.name,
+            currency: form.currency as 'ARS' | 'USD'
+        }]
+
+        localStorage.setItem('accounts', JSON.stringify(accountsData));
+        setAccounts(accountsData);
+        setForm(emptyForm)
         handleOpen();
     }
 
     useEffect(() => {
         const getData = async () => {
+
+            const accounts = localStorage.getItem('accounts');
+
+            if (accounts) {
+                setAccounts(JSON.parse(accounts));
+                return;
+            }
+
             const data = await getAccounts();
+            localStorage.setItem('accounts', JSON.stringify(data));
             setAccounts(data);
         }
 
