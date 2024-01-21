@@ -1,89 +1,46 @@
+'use client'
+import { useEffect, useState } from "react";
 import Header from "../components/header.component";
+import { Movement, Result } from "./interface/movement.interface";
+import { getMovements } from "../api/movement.api";
 
-interface Movement {
-    id: string;
-    title: string;
-    description?: string;
-    account: string;
-    category: string;
-    date: Date;
-    currency: string;
-    amount: number;
-}
-
-const data: Movement[] = [
-    {
-        id: '1',
-        title: 'Salary',
-        account: 'Cash',
-        category: 'Salary',
-        date: new Date(),
-        currency: 'USD',
-        amount: 400
-    },
-    {
-        id: '2',
-        title: 'Futbol 7',
-        account: 'Cash',
-        category: 'Sports',
-        date: new Date(),
-        currency: 'ARS',
-        amount: 1200
-    },
-    {
-        id: '3',
-        title: 'Futbol 5',
-        account: 'Cash',
-        category: 'Sports',
-        date: new Date("2023-08-01"),
-        currency: 'ARS',
-        amount: 1200
-    },
-    {
-        id: '4',
-        title: 'Futbol 5',
-        account: 'Cash',
-        category: 'Sports',
-        date: new Date("2023-08-01"),
-        currency: 'ARS',
-        amount: 1200
-    },
-    {
-        id: '5',
-        title: 'Futbol 5',
-        account: 'Cash',
-        category: 'Sports',
-        date: new Date("2023-09-01"),
-        currency: 'ARS',
-        amount: 1200
-    },
-    {
-        id: '6',
-        title: 'Futbol 5',
-        account: 'Cash',
-        category: 'Sports',
-        date: new Date("2023-09-01"),
-        currency: 'ARS',
-        amount: 1200
-    },
-
-]
-
-interface Result {
-    [key: string]: Movement[]
-}
-
-const registrosAgrupados = data.reduce((result: Result, registro: Movement) => {
-    const fecha = registro.date.toDateString();
-
-    if (!result[fecha]) {
-        result[fecha] = [];
-    }
-    result[fecha].push(registro);
-    return result;
-}, {});
 
 export default function Movements() {
+
+    const [movements, setMovements] = useState<Result>({});
+
+    useEffect(() => {
+
+        const getGroup = (movements: Movement[]) => {
+            console.log(movements)
+            return movements.reduce((result: Result, registro: Movement) => {
+                const fecha = new Date(registro.date).toDateString();
+
+                if (!result[fecha]) {
+                    result[fecha] = [];
+                }
+                result[fecha].push(registro);
+                return result;
+            }, {});
+        }
+
+        const getData = async () => {
+            const movementsStorage = localStorage.getItem('movements')
+
+            if (movementsStorage) {
+                console.log('hay data')
+                setMovements(getGroup(JSON.parse(movementsStorage)))
+                return
+            }
+
+            const movementData = await getMovements();
+            localStorage.setItem('movements', JSON.stringify(movementData))
+            setMovements(getGroup(movementData))
+        }
+
+        getData()
+    }, [])
+
     return (
         <main className="min-h-screen p-24">
 
@@ -99,7 +56,7 @@ export default function Movements() {
 
 
             {
-                Object.keys(registrosAgrupados).length === 0 && (
+                Object.keys(movements).length === 0 && (
                     <div className="flex items-center justify-center">
                         <p className="text-gray-600">
                             No movements yet.
@@ -109,7 +66,7 @@ export default function Movements() {
             }
 
             {
-                Object.keys(registrosAgrupados).length && (
+                Object.keys(movements).length > 0 && (
                     <div className="flex mb-8 flex-col md:flex-row justify-between gap-4">
                         <div className="flex items-center">
                             <input type="text" className="border border-gray-200 rounded-md px-4 py-2 w-full" placeholder="Search..." />
@@ -126,13 +83,13 @@ export default function Movements() {
 
             <div>
                 {
-                    Object.keys(registrosAgrupados).map((fecha) => (
+                    Object.keys(movements).map((fecha) => (
                         <div key={fecha} className="border-b border-gray-200">
                             <div className="mt-4">
                                 <p className="text-gray-600">{fecha}</p>
                             </div>
                             <div>
-                                {registrosAgrupados[fecha].map((registro: any) => (
+                                {movements[fecha].map((registro: any) => (
                                     <div className="flex justify-between items-center py-3">
                                         <div>
                                             <p className="text-gray-800 font-semibold">{registro.title}</p>
