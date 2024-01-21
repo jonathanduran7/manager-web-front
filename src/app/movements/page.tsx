@@ -12,7 +12,6 @@ export default function Movements() {
     useEffect(() => {
 
         const getGroup = (movements: Movement[]) => {
-            console.log(movements)
             return movements.reduce((result: Result, registro: Movement) => {
                 const fecha = new Date(registro.date).toDateString();
 
@@ -28,7 +27,6 @@ export default function Movements() {
             const movementsStorage = localStorage.getItem('movements')
 
             if (movementsStorage) {
-                console.log('hay data')
                 setMovements(getGroup(JSON.parse(movementsStorage)))
                 return
             }
