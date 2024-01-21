@@ -89,7 +89,7 @@ export default function Movements() {
 
             <Header />
 
-            <div className="flex flex-col items-center justify-center mb-10">
+            <div className="flex flex-col items-center justify-center mb-8">
                 <h1 className="text-3xl font-semibold pb-2">Movements</h1>
                 <p className="text-gray-600">
                     All your transactions will be grouped by category.
@@ -104,6 +104,22 @@ export default function Movements() {
                         <p className="text-gray-600">
                             No movements yet.
                         </p>
+                    </div>
+                )
+            }
+
+            {
+                Object.keys(registrosAgrupados).length && (
+                    <div className="flex mb-8 flex-col md:flex-row justify-between gap-4">
+                        <div className="flex items-center">
+                            <input type="text" className="border border-gray-200 rounded-md px-4 py-2 w-full" placeholder="Search..." />
+                            <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded ml-4">Search</button>
+                        </div>
+
+                        <div className="flex items-center justify-end">
+                            <p className="text-gray-600 mr-4">Filter by date</p>
+                            <input type="date" className="border border-gray-200 rounded-md px-4 py-2" />
+                        </div>
                     </div>
                 )
             }
