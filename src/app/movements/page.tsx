@@ -123,7 +123,7 @@ export default function Movements() {
                                             <p className="text-gray-600">{registro.account}</p>
                                         </div>
                                         <div>
-                                            <p className="text-gray-800 font-semibold">{registro.currency} {registro.amount}</p>
+                                            <p className="text-gray-800 font-semibold">{registro.amount} {registro.currency}</p>
                                         </div>
                                     </div>
                                 ))}
