@@ -1,36 +1,21 @@
 'use client'
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Category } from "../interfaces/category.interface";
 import {CategoryModal} from ".";
+import { getCategories } from "@/app/api/category.api";
 
-const data: Category[] = [
-    {
-        id: 1,
-        name: 'Food',
-        type: 'expense'
-    },
-    {
-        id: 2,
-        name: 'Salary',
-        type: 'income'
-    },
-    {
-        id: 3,
-        name: 'Freelance',
-        type: 'income'
-    }
-]
+const emptyForm: Omit<Category, 'id'> = { name: '', type: 'income' };
 
 export function CategoriesTab() {
     const [open, setOpen] = useState(false);
-    const [categories, setCategories] = useState<Category[]>(data);
-    const [form, setForm] = useState<Omit<Category, 'id'>>({
-        name: '',
-        type: 'income'
-    });
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [form, setForm] = useState<Omit<Category, 'id'>>(emptyForm);
+    
     const handleOpen = () => setOpen(!open);
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
         setForm({
             ...form,
             [e.target.name]: e.target.value
@@ -38,18 +23,39 @@ export function CategoriesTab() {
     }
 
     const handleSave = () => {
-        setCategories([
+
+        const newCategories = [
             ...categories,
             {
-                id: categories.length + 1,
+                id: Math.random().toString(36) + Date.now().toString(36),
                 name: form.name,
                 type: form.type as 'income' | 'expense'
-            }
-        ])
+            }]
+        
+        localStorage.setItem('categories', JSON.stringify(newCategories));
 
+        setCategories(newCategories);
         setForm({ name: '', type: 'income' })
         handleOpen();
     }
+
+    useEffect(() => {
+        const getData = async () => {
+
+            const categories = localStorage.getItem('categories');
+
+            if (categories) {
+                setCategories(JSON.parse(categories));
+                return;
+            }
+
+            const data = await getCategories();
+            localStorage.setItem('categories', JSON.stringify(data));
+            setCategories(data);
+        }
+
+        getData();
+    },[])
 
     return (
         <div>
@@ -65,6 +71,16 @@ export function CategoriesTab() {
                     Add Category
                 </button>
             </div>
+
+            {
+                categories.length === 0 && (
+                    <div className="flex items-center justify-center">
+                        <p className="text-gray-600">
+                            No categories yet.
+                        </p>
+                    </div>
+                )
+            }
 
             <div>
                 {
