@@ -1,64 +1,57 @@
 'use client'
 
-import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Account } from "../interfaces/account.interface";
+import { AccountModal } from "./account.modal";
+import { getAccounts } from "@/app/api/account.api";
 
-interface Account {
-    id: number;
-    name: string;
-    currency: 'ARS' | 'USD';
-}
+const emptyForm: Omit<Account, 'id'> = { name: '', currency: 'ARS' };
 
-const data: Account[] = [
-    {
-        id: 1,
-        name: 'Cash',
-        currency: 'ARS'
-    },
-    {
-        id: 2,
-        name: 'Banco galicia',
-        currency: 'ARS'
-    },
-    {
-        id: 3,
-        name: 'Mercado pago',
-        currency: 'ARS'
-    }
-]
-
-export default function AccountTab() {
+export function AccountTab() {
 
     const [open, setOpen] = useState(false);
-    const [accounts, setAccounts] = useState<Account[]>(data);
-
-    const [form, setForm] = useState({
-        name: '',
-        currency: 'ARS'
-    });
+    const [accounts, setAccounts] = useState<Account[]>([]);
+    const [form, setForm] = useState<Omit<Account, 'id'>>(emptyForm);
 
     const handleOpen = () => setOpen(!open);
 
-    const handleChange = (e: any) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        })
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
+        setForm({ ...form, [e.target.name]: e.target.value })
     }
 
     const handleSave = () => {
-        setAccounts([
-            ...accounts,
-            {
-                id: accounts.length + 1,
-                name: form.name,
-                currency: form.currency as 'ARS' | 'USD'
-            }
-        ])
 
-        setForm({ name: '', currency: 'ARS' })
+        const accountsData = [...accounts, {
+            id: Math.random().toString(36) + Date.now().toString(36),
+            name: form.name,
+            currency: form.currency as 'ARS' | 'USD'
+        }]
+
+        localStorage.setItem('accounts', JSON.stringify(accountsData));
+        setAccounts(accountsData);
+        setForm(emptyForm)
         handleOpen();
     }
+
+    useEffect(() => {
+        const getData = async () => {
+
+            const accounts = localStorage.getItem('accounts');
+
+            if (accounts) {
+                setAccounts(JSON.parse(accounts));
+                return;
+            }
+
+            const data = await getAccounts();
+            localStorage.setItem('accounts', JSON.stringify(data));
+            setAccounts(data);
+        }
+
+        getData();
+    }, [])
 
     return (
         <div>
@@ -74,6 +67,16 @@ export default function AccountTab() {
                     Add account
                 </button>
             </div>
+
+            {
+                accounts.length === 0 && (
+                    <div className="flex items-center justify-center">
+                        <p className="text-gray-600">
+                            No accounts yet.
+                        </p>
+                    </div>
+                )
+            }
 
             <div>
                 {
@@ -93,39 +96,13 @@ export default function AccountTab() {
                 }
             </div>
 
-            <Dialog open={open} handler={handleOpen} placeholder={""}>
-                <DialogHeader placeholder={""}>Agregar nueva cuenta</DialogHeader>
-                <DialogBody placeholder={""}>
-                    <div className="flex flex-col">
-                        <label className="text-gray-600">Name</label>
-                        <input
-                            type="text"
-                            className="border border-gray-300 rounded-sm px-4 py-2"
-                            name="name"
-                            value={form.name}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="flex flex-col mt-4">
-                        <label className="text-gray-600">Currency</label>
-                        <select className="border border-gray-300 rounded-sm px-4 py-2"
-                            name="currency"
-                            value={form.currency}
-                            onChange={handleChange}
-                        >
-                            <option value="ARS">ARS</option>
-                            <option value="USD">USD</option>
-                        </select>
-                    </div>
-                </DialogBody>
-                <DialogFooter placeholder={""}>
-                    <div className="flex gap-3 justify-between w-full">
-                        <button className="text-gray-600 hover:text-gray-900" onClick={handleOpen}>Cancel</button>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={handleSave}>Save</button>
-                    </div>
-                </DialogFooter>
-            </Dialog>
+            <AccountModal
+                open={open}
+                handleChange={handleChange}
+                handleSave={handleSave}
+                handleOpen={handleOpen}
+                form={form}
+            />
         </div>
     )
 }
