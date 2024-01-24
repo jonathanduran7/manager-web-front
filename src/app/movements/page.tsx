@@ -3,11 +3,15 @@ import { useEffect, useState } from "react";
 import Header from "../components/header.component";
 import { Movement, Result } from "./interface/movement.interface";
 import { getMovements } from "../api/movement.api";
+import { Button, Drawer, IconButton, Input, Select, Textarea, Typography } from "@material-tailwind/react";
 
 
 export default function Movements() {
 
     const [movements, setMovements] = useState<Result>({});
+    const [open, setOpen] = useState(false);
+    const openDrawer = () => setOpen(true);
+    const closeDrawer = () => setOpen(false);
 
     useEffect(() => {
 
@@ -42,7 +46,13 @@ export default function Movements() {
     return (
         <main className="min-h-screen p-24">
 
-            <Header />
+            <div className="flex justify-between">
+                <Header />
+
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded h-10" onClick={openDrawer}>Add Movement</button>
+            </div>
+
+
 
             <div className="flex flex-col items-center justify-center mb-8">
                 <h1 className="text-3xl font-semibold pb-2">Movements</h1>
@@ -103,6 +113,62 @@ export default function Movements() {
                     ))
                 }
             </div>
+
+            <Drawer open={open} onClose={closeDrawer} placeholder={""} placement="right">
+                <div className="flex items-center justify-between px-4 pb-2">
+                    <Typography variant="h5" color="blue-gray" placeholder={""}>
+                        Add Movement
+                    </Typography>
+                    <IconButton variant="text" color="blue-gray" onClick={closeDrawer} placeholder={""}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className="h-5 w-5"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </IconButton>
+                </div>
+                <form className="flex flex-col gap-6 p-4">
+
+                    <input
+                        type="text"
+                        placeholder="Title"
+                        name="Title"
+                        className="border border-gray-200 rounded-md px-4 py-2"
+                    />
+
+                    <input
+                        type="text"
+                        placeholder="Account"
+                        name="Account"
+                        className="border border-gray-200 rounded-md px-4 py-2"
+                    />
+
+                    <input
+                        type="number"
+                        placeholder="Amount"
+                        name="Amount"
+                        className="border border-gray-200 rounded-md px-4 py-2"
+                    />
+
+                    <select
+                        className="border border-gray-200 rounded-md px-4 py-2"
+                        name="Currency" >
+                        <option value="ARS">ARS</option>
+                        <option value="USD">USD</option>
+                    </select>
+
+                    <Button placeholder={""} onClick={closeDrawer}>Save</Button>
+                </form>
+            </Drawer>
         </main>
     )
 }
