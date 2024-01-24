@@ -54,6 +54,7 @@ export default function Movements() {
 
 
 
+            {/* TODO: move title */}
             <div className="flex flex-col items-center justify-center mb-8">
                 <h1 className="text-3xl font-semibold pb-2">Movements</h1>
                 <p className="text-gray-600">
@@ -62,7 +63,7 @@ export default function Movements() {
                 </p>
             </div>
 
-
+            {/* TODO: move empty message component */}
             {
                 Object.keys(movements).length === 0 && (
                     <div className="flex items-center justify-center">
@@ -73,6 +74,7 @@ export default function Movements() {
                 )
             }
 
+            {/* TODO: move search and filters */}
             {
                 Object.keys(movements).length > 0 && (
                     <div className="flex mb-8 flex-col md:flex-row justify-between gap-4">
@@ -89,6 +91,7 @@ export default function Movements() {
                 )
             }
 
+            {/* TODO: move movements list */}
             <div>
                 {
                     Object.keys(movements).map((fecha) => (
@@ -114,6 +117,7 @@ export default function Movements() {
                 }
             </div>
 
+            {/* TODO: move drawer to component */}
             <Drawer open={open} onClose={closeDrawer} placeholder={""} placement="right">
                 <div className="flex items-center justify-between px-4 pb-2">
                     <Typography variant="h5" color="blue-gray" placeholder={""}>
